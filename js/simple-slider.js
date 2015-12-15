@@ -90,6 +90,7 @@ var __slice = [].slice,
         }
       }).mouseup(function(e) {
         if (_this.dragging) {
+          _this.domDrag2(e.pageX, e.pageY, true);
           _this.dragging = false;
           _this.dragger.removeClass("dragging");
           return $("body").css({
@@ -164,12 +165,27 @@ var __slice = [].slice,
         ratio = pagePos / this.slider.outerWidth();
         value = this.ratioToValue(ratio);
         this.valueChanged(value, ratio, "domDrag");
+        return this.setSliderPosition(pagePos, animate);
+      }
+    };
+	
+    SimpleSlider.prototype.domDrag2 = function(pageX, pageY, animate) {
+      var pagePos, ratio, value;
+      if (animate == null) {
+        animate = false;
+      }
+      pagePos = pageX - this.slider.offset().left;
+      pagePos = Math.min(this.slider.outerWidth(), pagePos);
+      pagePos = Math.max(0, pagePos);
+        this.pagePos = pagePos;
+        ratio = pagePos / this.slider.outerWidth();
+        value = this.ratioToValue(ratio);
+        this.valueChanged(value, ratio, "domDrag");
         if (this.settings.snap) {
           return this.setSliderPositionFromValue(value, animate);
         } else {
           return this.setSliderPosition(pagePos, animate);
         }
-      }
     };
 
     SimpleSlider.prototype.setSliderPosition = function(position, animate) {
